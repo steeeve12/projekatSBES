@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace Contracts
 {
-    public enum EProcessType
+    public class ProcessConfig
     {
-        GoogleChrome = 0,
-        VisualStudio15 = 1,
-        Paint = 2,
-        Mozilla = 3,
+
     }
 }
