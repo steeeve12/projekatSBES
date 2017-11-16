@@ -11,15 +11,18 @@ namespace Client
     {
         static void Main(string[] args)
         {
-            using (ClientProxy proxy = new ClientProxy("Service.IService"))
+            using (ClientProxy proxy = new ClientProxy("Contracts.IService"))
             {
-                if(proxy.RunProcess(EProcessType.GoogleChrome))
+
+                EProcessType procces = EProcessType.GoogleChrome;
+
+                if(proxy.RunProcess(procces))
                 {
-                    Console.WriteLine("Google Chrome is started!");
+                    Console.WriteLine(procces.ToString() + " is started!");
                 }
                 else
                 {
-                    Console.WriteLine("Google Chrome is not started!");
+                    Console.WriteLine(procces.ToString() + " is not started!");
                 }         
             }
             Console.ReadLine();
