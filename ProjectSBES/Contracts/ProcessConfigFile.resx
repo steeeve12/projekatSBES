@@ -123,8 +123,8 @@
   <data name="Mozilla" xml:space="preserve">
     <value>C:\Program Files (x86)\Mozilla Firefox\firefox.exe</value>
   </data>
-  <data name="Paint" xml:space="preserve">
-    <value>C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Accessories\Paint.exe</value>
+  <data name="Notepad" xml:space="preserve">
+    <value>C:\Windows\notepad.exe</value>
   </data>
   <data name="VisualStudio15" xml:space="preserve">
     <value>C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe</value>

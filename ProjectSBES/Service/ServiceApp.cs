@@ -1,6 +1,7 @@
 ﻿using Contracts;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,15 @@ namespace Service
     {
         public bool RunProcess(EProcessType process)
         {
-            throw new NotImplementedException();
+            string processName = ProcessConfig.GetValue(process);
+
+            if (processName != null)
+            {
+                Process.Start(processName);
+                return true;
+            }
+
+            return false;
         }
     }
 }

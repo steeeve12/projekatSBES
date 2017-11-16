@@ -79,11 +79,11 @@ namespace Contracts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Accessories\Paint.exe.
+        ///   Looks up a localized string similar to C:\Windows\notepad.exe.
         /// </summary>
-        internal static string Paint {
+        internal static string Notepad {
             get {
-                return ResourceManager.GetString("Paint", resourceCulture);
+                return ResourceManager.GetString("Notepad", resourceCulture);
             }
         }
         

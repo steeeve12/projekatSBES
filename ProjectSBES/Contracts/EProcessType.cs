@@ -12,5 +12,6 @@ namespace Contracts
         VisualStudio15 = 1,
         Paint = 2,
         Mozilla = 3,
+        Notepad = 4
     }
 }
