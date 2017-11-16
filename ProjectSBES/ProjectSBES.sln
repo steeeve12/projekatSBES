@@ -5,6 +5,10 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{C67AFDD7-9BB5-4B0D-A3C9-A7A1EA7B2007}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{21DBCD34-63D2-4B8F-9A1F-4DB19C14D87E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditService", "AuditService\AuditService.csproj", "{EDE41CB3-7986-4911-A096-585BC7C4C068}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{C67AFDD7-9BB5-4B0D-A3C9-A7A1EA7B2007}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C67AFDD7-9BB5-4B0D-A3C9-A7A1EA7B2007}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C67AFDD7-9BB5-4B0D-A3C9-A7A1EA7B2007}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21DBCD34-63D2-4B8F-9A1F-4DB19C14D87E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21DBCD34-63D2-4B8F-9A1F-4DB19C14D87E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21DBCD34-63D2-4B8F-9A1F-4DB19C14D87E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21DBCD34-63D2-4B8F-9A1F-4DB19C14D87E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDE41CB3-7986-4911-A096-585BC7C4C068}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDE41CB3-7986-4911-A096-585BC7C4C068}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDE41CB3-7986-4911-A096-585BC7C4C068}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDE41CB3-7986-4911-A096-585BC7C4C068}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
