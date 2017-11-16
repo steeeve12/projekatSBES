@@ -45,9 +45,21 @@
     <Compile Include="EProcessType.cs" />
     <Compile Include="IAuditService.cs" />
     <Compile Include="IService.cs" />
+    <Compile Include="ProcessConfig.cs" />
+    <Compile Include="ProcessConfigFile.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProcessConfigFile.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RolesConfiguration.cs" />
     <Compile Include="SecurityEvent.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ProcessConfigFile.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProcessConfigFile.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
