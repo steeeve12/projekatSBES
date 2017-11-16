@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Contracts
 {
     [ServiceContract]
-    interface IService
+    public interface IService
     {
         [OperationContract]
         bool RunProcess(EProcessType process);
