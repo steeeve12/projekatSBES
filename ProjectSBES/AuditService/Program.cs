@@ -1,8 +1,11 @@
-﻿using System;
+﻿using AuditLibrary;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
 using System.ServiceModel.Description;
+using System.ServiceModel.Security;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,9 +16,12 @@ namespace Audit.AuditService
     {
         static void Main(string[] args)
         {
+            /// srvCertCN.SubjectName should be set to the service's username. .NET WindowsIdentity class provides information about Windows user running the given process
+            string srvCertCN = "wcfservice";//Formatter.ParseName(WindowsIdentity.GetCurrent().Name);
+
             ServiceHost _serviceHost = new ServiceHost(typeof(AuditService));
 
-            // Auditing
+            /// Auditing
             ServiceSecurityAuditBehavior newAudit = new ServiceSecurityAuditBehavior();
             newAudit.AuditLogLocation = AuditLogLocation.Application;
             newAudit.ServiceAuthorizationAuditLevel = AuditLevel.SuccessOrFailure;
@@ -23,18 +29,38 @@ namespace Audit.AuditService
 
             _serviceHost.Description.Behaviors.Remove<ServiceSecurityAuditBehavior>();
             _serviceHost.Description.Behaviors.Add(newAudit);
-            //
 
-            _serviceHost.Open();
 
-            Console.WriteLine("AUDIT_SERVER: Ready and waiting for requests. Press any key to exit.");
+            ///Certificates
+            ///Custom validation mode enables creation of a custom validator - CustomCertificateValidator
+            _serviceHost.Credentials.ClientCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.Custom;
+            _serviceHost.Credentials.ClientCertificate.Authentication.CustomCertificateValidator = new ServiceCertValidator();
 
-            Console.ReadLine();
+            ///If CA doesn't have a CRL associated, WCF blocks every client because it cannot be validated
+            _serviceHost.Credentials.ClientCertificate.Authentication.RevocationMode = X509RevocationMode.NoCheck;
 
-            _serviceHost.Close();
-            Console.WriteLine("AUDIT_SERVER: Stopped.");
+            ///Set appropriate service's certificate on the host. Use CertManager class to obtain the certificate based on the "srvCertCN"
+            _serviceHost.Credentials.ServiceCertificate.Certificate = CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, srvCertCN);
+            /// host.Credentials.ServiceCertificate.Certificate = CertManager.GetCertificateFromFile("WCFService.pfx");
+            
+            try
+            {
+                _serviceHost.Open();
+                Console.WriteLine("AUDIT_SERVER: Ready and waiting for requests. Press any key to exit.");
+                Console.ReadLine();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("[ERROR] {0}", e.Message);
+                Console.WriteLine("[StackTrace] {0}", e.StackTrace);
+            }
+            finally
+            {
+                _serviceHost.Close();
+                Console.WriteLine("AUDIT_SERVER: Stopped.");
 
-            Thread.Sleep(3 * 1000);
+                Thread.Sleep(3 * 1000);
+            }
         }
     }
 }

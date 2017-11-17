@@ -11,6 +11,6 @@ namespace Contracts
     public interface IAuditService
     {
         [OperationContract]
-        bool WriteEvent(SecurityEvent sEvent);
+        bool WriteEvent(SecurityEvent sEvent, byte[] sign);
     }
 }

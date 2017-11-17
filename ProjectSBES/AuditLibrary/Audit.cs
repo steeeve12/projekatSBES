@@ -13,6 +13,7 @@ namespace Audit.AuditLibrary
         private static EventLog customLog = null;
         const string SourceName = "AuditLibrary.Audit";
         const string LogName = "ServiceSecurityEvents";
+        private static Object lockObject = new Object();
 
         static Audit()
         {
@@ -37,7 +38,12 @@ namespace Audit.AuditLibrary
             if (customLog != null)
             {
                 string s = String.Format("[{0}] Client [{1}, {2}] failed with running process [{3}] on service [{4}, {5}]", sEvent.Timestamp, sEvent.ClientId, sEvent.ClientComputerName, sEvent.EventId, serviceId, computerName);
-                customLog.WriteEntry(s);
+                //string s = String.Format("Message: {0}", sEvent);
+
+                lock (lockObject)
+                {
+                    customLog.WriteEntry(s);
+                }
             }
             else
             {
