@@ -51,6 +51,7 @@
     </Compile>
     <Compile Include="CustomAuthorizationManager.cs" />
     <Compile Include="CustomAuthorizationPolicy.cs" />
+    <Compile Include="CustomPrincipal.cs" />
     <Compile Include="EProcessType.cs" />
     <Compile Include="Formatter.cs" />
     <Compile Include="IAuditService.cs" />
