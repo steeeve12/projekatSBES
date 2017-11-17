@@ -43,6 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlackListConfiguration.cs" />
+    <Compile Include="BlackListFile.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BlackListFile.resx</DependentUpon>
+    </Compile>
     <Compile Include="CustomAuthorizationManager.cs" />
     <Compile Include="CustomAuthorizationPolicy.cs" />
     <Compile Include="EProcessType.cs" />
@@ -58,6 +64,10 @@
     <Compile Include="SecurityEvent.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="BlackListFile.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>BlackListFile.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="ProcessConfigFile.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ProcessConfigFile.Designer.cs</LastGenOutput>

@@ -57,7 +57,7 @@ namespace Contracts
 
                 if (windowsIdentity != null)
                 {
-                    principal = new CustomPrincipal(windowsIdentity);
+                   // principal = new CustomPrincipal(windowsIdentity);
                 }
 
                 return principal;
