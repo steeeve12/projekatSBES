@@ -23,7 +23,8 @@ namespace Audit.AuditLibrary
                 {
                     EventLog.CreateEventSource(SourceName, LogName);
                 }
-                /// create customLog handle
+
+                /// Create customLog handle
                 customLog = new EventLog(LogName, Environment.MachineName, SourceName);
             }
             catch (Exception e)
@@ -33,13 +34,16 @@ namespace Audit.AuditLibrary
             }
         }
 
-        public static void WriteSecurityEvent(string serviceId, string computerName, SecurityEvent sEvent)
+        /// <summary>
+        /// Writing security event to Windows Event Log
+        /// </summary>
+        /// <param name="sEvent"> security event to be written to event log </param>
+        public static void WriteSecurityEvent(SecurityEvent sEvent)
         {
             if (customLog != null)
             {
-                string s = String.Format("[{0}] Client [{1}, {2}] failed with running process [{3}] on service [{4}, {5}]", sEvent.Timestamp, sEvent.ClientId, sEvent.ClientComputerName, sEvent.EventId, serviceId, computerName);
-                //string s = String.Format("Message: {0}", sEvent);
-
+                string s = String.Format("[{0}] Client [id - {1}, computer name - {2}] failed with running process [{3}] on service [id - {4}, computer name - {5}]", sEvent.Timestamp, sEvent.ClientId, sEvent.ClientComputerName, sEvent.EventId, sEvent.ServiceId, sEvent.ClientComputerName);
+                
                 lock (lockObject)
                 {
                     customLog.WriteEntry(s);
@@ -47,7 +51,7 @@ namespace Audit.AuditLibrary
             }
             else
             {
-                throw new ArgumentException(string.Format("Error while trying to write event to event log."));
+                throw new ArgumentException(string.Format("Error while trying to write security event to event log."));
             }
         }
 

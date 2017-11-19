@@ -16,9 +16,7 @@ namespace AuditClientTest
 
         public AuditClient(NetTcpBinding binding, EndpointAddress address) : base(binding, address)
         {
-
-            /// cltCertCN.SubjectName should be set to the client's username. .NET WindowsIdentity class provides information about Windows user running the given process
-            string cltCertCN = "wcfclient";//Formatter.ParseName(WindowsIdentity.GetCurrent().Name);
+            string cltCertCN = "wcfclient";
 
             this.Credentials.ServiceCertificate.Authentication.CertificateValidationMode = System.ServiceModel.Security.X509CertificateValidationMode.Custom;
             this.Credentials.ServiceCertificate.Authentication.CustomCertificateValidator = new ClientCertValidator();
@@ -26,9 +24,16 @@ namespace AuditClientTest
 
             /// Set appropriate client's certificate on the channel. Use CertManager class to obtain the certificate based on the "cltCertCN"
             this.Credentials.ClientCertificate.Certificate = CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, cltCertCN);
+
             factory = this.CreateChannel();
         }
 
+        /// <summary>
+        /// Writing a security event to Windows Event log
+        /// </summary>
+        /// <param name="sEvent"> Securi</param>
+        /// <param name="sign"></param>
+        /// <returns></returns>
         public bool WriteEvent(SecurityEvent sEvent, byte[] sign)
         {
             bool retVal = false;
@@ -42,7 +47,6 @@ namespace AuditClientTest
                 Console.WriteLine("[WriteEvent] ERROR = {0}", e.Message);
             }
             return retVal;
-          
         }
     }
 }

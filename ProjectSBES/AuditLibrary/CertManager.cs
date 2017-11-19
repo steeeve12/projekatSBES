@@ -34,7 +34,7 @@ namespace AuditLibrary
                 }
             }
 
-            return null; //vrati null ako ne postoji
+            return null;
         }
 
         /// <summary>
@@ -46,12 +46,12 @@ namespace AuditLibrary
         {
             X509Certificate2 certificate = null;
 
-            ///In order to create .pfx file, access to a protected .pvk file will be required.
-            ///For security reasons, password must not be kept as string. .NET class SecureString provides a confidentiality of a plaintext
+            /// In order to create .pfx file, access to a protected .pvk file will be required.
+            /// For security reasons, password must not be kept as string. .NET class SecureString provides a confidentiality of a plaintext
             Console.Write("Insert password for the private key: ");
             string pwd = Console.ReadLine();
 
-            ///Convert string to SecureString
+            /// Convert string to SecureString
             SecureString secPwd = new SecureString();
             foreach (char c in pwd)
             {

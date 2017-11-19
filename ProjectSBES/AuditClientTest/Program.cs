@@ -2,6 +2,7 @@
 using Contracts;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Principal;
@@ -18,8 +19,7 @@ namespace AuditClientTest
             /// Define the expected service certificate. It is required to establish cmmunication using certificates.
 			string srvCertCN = "wcfservice";
 
-            /// Define the expected certificate for signing ("<username>_sign" is the expected subject name).
-            /// .NET WindowsIdentity class provides information about Windows user running the given process
+            /// Define the expected certificate for signing client
             string signCertCN = "wcfclient";
 
             NetTcpBinding binding = new NetTcpBinding();
@@ -32,8 +32,9 @@ namespace AuditClientTest
 
             using (AuditClient proxy = new AuditClient(binding, address))
             {
-                /// 2. Digital Signing test	
-				SecurityEvent message = new SecurityEvent("id", "compName", new DateTime(), 1, "event description");
+                /// Get service's identity	
+                WindowsIdentity winIdentity = WindowsIdentity.GetCurrent();
+				SecurityEvent message = new SecurityEvent((winIdentity.User).ToString(), winIdentity.Name, "id", "compName", new DateTime(), 1, "event description");
 
                 /// Create a signature based on the "signCertCN"
                 X509Certificate2 signCert = CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, signCertCN);
@@ -41,8 +42,7 @@ namespace AuditClientTest
                 /// Create a signature using SHA1 hash algorithm
                 byte[] signature = DigitalSignature.Create(message, "SHA1", signCert);
                 proxy.WriteEvent(message, signature);
-
-                Console.WriteLine("Press <enter> to continue ...", signCertCN);
+          
                 Console.ReadLine();
             }            
         }

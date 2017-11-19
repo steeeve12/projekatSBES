@@ -1,6 +1,7 @@
 ﻿using AuditLibrary;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
@@ -16,8 +17,8 @@ namespace Audit.AuditService
     {
         static void Main(string[] args)
         {
-            /// srvCertCN.SubjectName should be set to the service's username. .NET WindowsIdentity class provides information about Windows user running the given process
-            string srvCertCN = "wcfservice";//Formatter.ParseName(WindowsIdentity.GetCurrent().Name);
+
+            string srvCertCN = "wcfservice";
 
             ServiceHost _serviceHost = new ServiceHost(typeof(AuditService));
 
@@ -31,17 +32,16 @@ namespace Audit.AuditService
             _serviceHost.Description.Behaviors.Add(newAudit);
 
 
-            ///Certificates
+            /// Certificates
             ///Custom validation mode enables creation of a custom validator - CustomCertificateValidator
             _serviceHost.Credentials.ClientCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.Custom;
             _serviceHost.Credentials.ClientCertificate.Authentication.CustomCertificateValidator = new ServiceCertValidator();
 
-            ///If CA doesn't have a CRL associated, WCF blocks every client because it cannot be validated
+            /// If CA doesn't have a CRL associated, WCF blocks every client because it cannot be validated
             _serviceHost.Credentials.ClientCertificate.Authentication.RevocationMode = X509RevocationMode.NoCheck;
 
-            ///Set appropriate service's certificate on the host. Use CertManager class to obtain the certificate based on the "srvCertCN"
-            _serviceHost.Credentials.ServiceCertificate.Certificate = CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, srvCertCN);
-            /// host.Credentials.ServiceCertificate.Certificate = CertManager.GetCertificateFromFile("WCFService.pfx");
+            /// Set appropriate service's certificate on the host. Use CertManager class to obtain the certificate based on the "srvCertCN"
+            _serviceHost.Credentials.ServiceCertificate.Certificate = CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, srvCertCN);        
             
             try
             {
@@ -52,7 +52,6 @@ namespace Audit.AuditService
             catch (Exception e)
             {
                 Console.WriteLine("[ERROR] {0}", e.Message);
-                Console.WriteLine("[StackTrace] {0}", e.StackTrace);
             }
             finally
             {

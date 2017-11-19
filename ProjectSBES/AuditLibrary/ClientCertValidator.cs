@@ -21,7 +21,6 @@ namespace AuditLibrary
             if (certificate.Subject.Equals(certificate.Issuer))
             {
                 throw new NotImplementedException("Certificate is self-issued.");
-
             }
         }
     }
