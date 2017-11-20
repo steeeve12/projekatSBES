@@ -12,11 +12,11 @@ namespace Client
     {
         static void Main(string[] args)
         {
-            string address = "net.tcp://10.1.212.165:50030/IService";
-            EndpointAddress ea = new EndpointAddress(new Uri(address), EndpointIdentity.CreateUpnIdentity("Administrator@P04-05"));
-            using (ClientProxy proxy = new ClientProxy(new NetTcpBinding(), ea))
-            {
+            Console.WriteLine("Enter endpoint name of server you want to target [Contracts.IService.ServerOne, Contracts.IService.ServerTwo, Contracts.IService.ServeThree]: ");
+            string endpointConfigurationName = Console.ReadLine();
 
+            using (ClientProxy proxy = new ClientProxy(endpointConfigurationName))
+            {
                 EProcessType procces = EProcessType.GoogleChrome;
 
                 if(proxy.RunProcess(procces))
