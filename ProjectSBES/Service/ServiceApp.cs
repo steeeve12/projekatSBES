@@ -44,7 +44,8 @@ namespace Service
                         {
                             ServiceDataHelper.Helper().forbidenUsers[userIdentity].Start();
 
-                            // to do: auditClient
+                            //Connect to Audit
+                            ServiceProxy.Audit("Contracts.IAuditService").WriteEvent(new SecurityEvent());
 
                             return false;
                         }
