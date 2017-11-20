@@ -1,0 +1,89 @@
+﻿<UserControl x:Class="BlackListConsole.View.MainWindowView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converter="clr-namespace:BlackListConsole.Converter"
+             xmlns:local="clr-namespace:BlackListConsole.View"             
+             mc:Ignorable="d" 
+             d:DesignHeight="590" d:DesignWidth="580">
+
+    <UserControl.Resources>
+        <converter:MultiCloneConverter x:Key="multiCloner"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <DataGrid ItemsSource="{Binding Path=BlackListItems,
+					UpdateSourceTrigger=PropertyChanged}"  AutoGenerateColumns="False"
+                  Height="224" HorizontalAlignment="Left"
+                  Margin="39,82,0,0" Name="dataGrid1"
+                  VerticalAlignment="Top" Width="479" SelectionMode="Single"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Process" Width="140" Binding="{Binding Process}" />
+                <DataGridTextColumn Header="Group/Person" Width="*" Binding="{Binding GroupPerson}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <TextBox x:Name="ProcessName" HorizontalAlignment="Left" Height="23" Margin="132,371,0,0"
+                 TextWrapping="Wrap" Text="{Binding ProcessName}" VerticalAlignment="Top" Width="120" />
+        <Label x:Name="AddGroupPerson" Content="Add group/person" HorizontalAlignment="Left"
+               Margin="77,327,0,0"
+               VerticalAlignment="Top" Width="134"/>
+        <Label x:Name="label1" Content="Process name" HorizontalAlignment="Left" Margin="10,368,0,0"
+               VerticalAlignment="Top" Width="103"/>
+        <Label x:Name="label2" Content="Group name" HorizontalAlignment="Left" Margin="10,422,0,0"
+               VerticalAlignment="Top" Width="103"/>
+        <TextBox x:Name="GroupName" HorizontalAlignment="Left" Height="23" Margin="132,422,0,0"
+                 TextWrapping="Wrap" Text="{Binding GroupName}" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="label3" Content="Person name" HorizontalAlignment="Left" Margin="10,476,0,0" 
+               VerticalAlignment="Top" Width="103"/>
+        <TextBox x:Name="PersonName" HorizontalAlignment="Left" Height="23" Margin="132,476,0,0"
+                 TextWrapping="Wrap" Text="{Binding PersonName}" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="RemoveGroupPerson" Content="Remove group/person" HorizontalAlignment="Left"
+               Margin="345,327,0,0"
+               VerticalAlignment="Top" Width="134"/>
+        <Label x:Name="label4" Content="Process name" HorizontalAlignment="Left" Margin="282,368,0,0"
+               VerticalAlignment="Top" Width="103"/>
+        <TextBox x:Name="ProcessName2" HorizontalAlignment="Left" Height="23" Margin="412,371,0,0"
+                 TextWrapping="Wrap" Text="{Binding ProcessName2}" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="label5" Content="Group name" HorizontalAlignment="Left" Margin="282,419,0,0"
+               VerticalAlignment="Top" Width="103"/>
+        <TextBox x:Name="GroupName2" HorizontalAlignment="Left" Height="23" Margin="412,422,0,0"
+                 TextWrapping="Wrap" Text="{Binding GroupName2}" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="label6" Content="Person name" HorizontalAlignment="Left" Margin="282,473,0,0" 
+               VerticalAlignment="Top" Width="103"/>
+        <TextBox x:Name="PersonName2" HorizontalAlignment="Left" Height="23" Margin="412,476,0,0" 
+                 TextWrapping="Wrap" Text="{Binding PersonName2}" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="button" Content="Confirm" HorizontalAlignment="Left" Margin="132,543,0,0"
+                VerticalAlignment="Top" Width="75" Command="{Binding AddCommand}">
+            <Button.CommandParameter>
+                <MultiBinding Converter="{StaticResource multiCloner}">
+                    <Binding Path="Text" ElementName="ProcessName"/>
+                    <Binding Path="Text" ElementName="GroupName"/>
+                    <Binding Path="Text" ElementName="PersonName"/>
+                </MultiBinding>
+            </Button.CommandParameter>
+        </Button>
+        <Button x:Name="button1" Content="Confirm" HorizontalAlignment="Left" Margin="412,543,0,0"
+                VerticalAlignment="Top" Width="75" Command="{Binding RemoveCommand}">
+            <Button.CommandParameter>
+                <MultiBinding Converter="{StaticResource multiCloner}">
+                    <Binding Path="Text" ElementName="ProcessName2"/>
+                    <Binding Path="Text" ElementName="GroupName2"/>
+                    <Binding Path="Text" ElementName="PersonName2"/>
+                </MultiBinding>
+            </Button.CommandParameter>
+        </Button>
+        <Label x:Name="label7" Content="Black list" HorizontalAlignment="Left" Margin="208,31,0,0"
+               VerticalAlignment="Top" Width="256" Height="59" FontFamily="Coronet"
+               Foreground="Red" FontSize="30"/>
+    </Grid>
+
+</UserControl>

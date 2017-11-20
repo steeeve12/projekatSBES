@@ -13,7 +13,7 @@ namespace Client
     {
         IService factory;
 
-        public ClientProxy(string endpointConfigurationName) : base(endpointConfigurationName)
+        public ClientProxy(NetTcpBinding binding, EndpointAddress a) : base(binding, a)
         {
             factory = this.CreateChannel();
         }
