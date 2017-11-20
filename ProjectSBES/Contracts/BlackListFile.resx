@@ -121,7 +121,7 @@
     <value>!user2</value>
   </data>
   <data name="Mozilla" xml:space="preserve">
-    <value />
+    <value>!</value>
   </data>
   <data name="Notepad" xml:space="preserve">
     <value>RegularUser!</value>

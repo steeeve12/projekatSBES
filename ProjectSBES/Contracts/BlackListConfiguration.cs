@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Reflection;
+using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,26 +19,55 @@ namespace Contracts
 
     public class BlackListConfiguration
     {
+        private static ResourceManager resourceManager = null;
+        private static ResourceSet resourceSet = null;
+        private static object resourceLock = new object();
+
+        private static ResourceManager ResourceManager
+        {
+            get
+            {
+                lock (resourceLock)
+                {
+                    if (resourceManager == null)
+                    {
+                        resourceManager = new ResourceManager(typeof(BlackListFile).FullName, Assembly.GetExecutingAssembly());
+                    }
+
+                    return resourceManager;
+                }
+            }
+        }
+
+        public static ResourceSet ResourceSet
+        {
+            get
+            {
+                lock (resourceLock)
+                {
+                    if (resourceSet == null)
+                    {
+                        resourceSet = ResourceManager.GetResourceSet(CultureInfo.InvariantCulture, true, true);
+                    }
+
+                    return resourceSet;
+                }
+            }
+        }
+
         public static string GetBlackListValue(string processName)
         {
             string values = null;
+            string path = "../../../Contracts/BlackListFile.resx";
 
-            switch (processName)
+            ResXResourceReader reader = new ResXResourceReader(path);
+            foreach (DictionaryEntry node in reader)
             {
-                case "GoogleChrome":
-                    values = BlackListFile.GoogleChrome;
+                if (processName == node.Key.ToString())
+                {
+                    values = node.Value.ToString();
                     break;
-                case "Mozilla":
-                    values = BlackListFile.Mozilla;
-                    break;
-                case "VisualStudio15":
-                    values = BlackListFile.VisualStudio15;
-                    break;
-                case "Notepad":
-                    values = BlackListFile.Notepad;
-                    break;
-                default:
-                    break;
+                }
             }
 
             return values;

@@ -31,7 +31,7 @@ namespace BlackListConsole
             List<BlackListElement> listOfElements = new List<BlackListElement>();
             BlackListElement element;
 
-            foreach (DictionaryEntry entry in ProcessConfig.ResourceSet)
+            foreach (DictionaryEntry entry in BlackListConfiguration.ResourceSet)
             {
                 element = new BlackListElement();
                 element.Process = entry.Key.ToString();

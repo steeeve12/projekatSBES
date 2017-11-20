@@ -11,42 +11,6 @@ namespace Contracts
 {
     public class ProcessConfig
     {
-        private static ResourceManager resourceManager = null;
-        private static ResourceSet resourceSet = null;
-        private static object resourceLock = new object();
-
-        private static ResourceManager ResourceManager
-        {
-            get
-            {
-                lock (resourceLock)
-                {
-                    if (resourceManager == null)
-                    {
-                        resourceManager = new ResourceManager(typeof(ProcessConfigFile).FullName, Assembly.GetExecutingAssembly());
-                    }
-
-                    return resourceManager;
-                }
-            }
-        }
-
-        public static ResourceSet ResourceSet
-        {
-            get
-            {
-                lock (resourceLock)
-                {
-                    if (resourceLock == null)
-                    {
-                        resourceLock = ResourceManager.GetResourceSet(CultureInfo.InvariantCulture, true, true);
-                    }
-
-                    return resourceSet;
-                }
-            }
-        }
-
         public static string GetValue(EProcessType process)
         {
             string values = null;
