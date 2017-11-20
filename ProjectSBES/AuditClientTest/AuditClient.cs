@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Principal;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,8 @@ namespace AuditClientTest
 
         public AuditClient(NetTcpBinding binding, EndpointAddress address) : base(binding, address)
         {
-            string cltCertCN = "wcfclient";
+            /// cltCertCN.SubjectName should be set to the client's username. .NET WindowsIdentity class provides information about Windows user running the given process
+            string cltCertCN = Formatter.ParseName(WindowsIdentity.GetCurrent().Name); //"wcfclient";
 
             this.Credentials.ServiceCertificate.Authentication.CertificateValidationMode = System.ServiceModel.Security.X509CertificateValidationMode.Custom;
             this.Credentials.ServiceCertificate.Authentication.CustomCertificateValidator = new ClientCertValidator();
@@ -33,7 +35,7 @@ namespace AuditClientTest
         /// </summary>
         /// <param name="sEvent"> Securi</param>
         /// <param name="sign"></param>
-        /// <returns></returns>
+        /// <returns> true if writing succeeded, otherwise false </returns>
         public bool WriteEvent(SecurityEvent sEvent, byte[] sign)
         {
             bool retVal = false;

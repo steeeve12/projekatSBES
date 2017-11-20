@@ -24,8 +24,8 @@ namespace Audit.AuditService
         {
             bool retVal = false;
 
-            /// Get client's certificate from storage. 			
-			X509Certificate2 clientCertificate = CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, "wcfclient");
+            /// Get client's certificate from storage. It is expected that clients sign messages using the certificate with subjectName in the following format "<username>_sign" 			
+			X509Certificate2 clientCertificate = CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, "service1_sign");
 
             /// Verify signature using SHA1 hash algorithm
 			if (DigitalSignature.Verify(sEvent, "SHA1", sign, clientCertificate))

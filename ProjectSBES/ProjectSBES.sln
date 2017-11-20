@@ -17,6 +17,33 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Audit", "Audit", "{E3A8EE65
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditClientTest", "AuditClientTest\AuditClientTest.csproj", "{B6AD7F52-8A72-4B34-9653-E2D3DE17485A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Certificates", "Certificates", "{39EB1F82-7AEB-48CB-81A9-12A39AC1C63B}"
+	ProjectSection(SolutionItems) = preProject
+		Certificates\auditservice.cer = Certificates\auditservice.cer
+		Certificates\auditservice.pfx = Certificates\auditservice.pfx
+		Certificates\auditservice.pvk = Certificates\auditservice.pvk
+		Certificates\GlobalCA.cer = Certificates\GlobalCA.cer
+		Certificates\GlobalCA.pvk = Certificates\GlobalCA.pvk
+		Certificates\service1.cer = Certificates\service1.cer
+		Certificates\service1.pfx = Certificates\service1.pfx
+		Certificates\service1.pvk = Certificates\service1.pvk
+		Certificates\service2.cer = Certificates\service2.cer
+		Certificates\service2.pfx = Certificates\service2.pfx
+		Certificates\service2.pvk = Certificates\service2.pvk
+		Certificates\service3.cer = Certificates\service3.cer
+		Certificates\service3.pfx = Certificates\service3.pfx
+		Certificates\service3.pvk = Certificates\service3.pvk
+		Certificates\Sign1.cer = Certificates\Sign1.cer
+		Certificates\Sign1.pfx = Certificates\Sign1.pfx
+		Certificates\Sign1.pvk = Certificates\Sign1.pvk
+		Certificates\Sign2.cer = Certificates\Sign2.cer
+		Certificates\Sign2.pfx = Certificates\Sign2.pfx
+		Certificates\Sign2.pvk = Certificates\Sign2.pvk
+		Certificates\Sign3.cer = Certificates\Sign3.cer
+		Certificates\Sign3.pfx = Certificates\Sign3.pfx
+		Certificates\Sign3.pvk = Certificates\Sign3.pvk
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

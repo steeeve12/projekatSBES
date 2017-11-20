@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Principal;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.ServiceModel.Security;
@@ -17,8 +18,8 @@ namespace Audit.AuditService
     {
         static void Main(string[] args)
         {
-
-            string srvCertCN = "wcfservice";
+            /// srvCertCN.SubjectName should be set to the service's username. .NET WindowsIdentity class provides information about Windows user running the given process
+            string srvCertCN = Formatter.ParseName(WindowsIdentity.GetCurrent().Name); ; //"wcfservice";
 
             ServiceHost _serviceHost = new ServiceHost(typeof(AuditService));
 
