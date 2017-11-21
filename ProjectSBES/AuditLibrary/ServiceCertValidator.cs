@@ -27,10 +27,7 @@ namespace AuditLibrary
             {
                 throw new Exception("Certificate is not from the valid issuer.");
             }
-        }
-
-
-       
+        }      
       
     }
 }
