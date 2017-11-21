@@ -30,7 +30,7 @@ namespace Service
         }
         public bool WriteEvent(SecurityEvent sEvent, byte[] sign)
         {
-            throw new NotImplementedException();
+            return factory.WriteEvent(sEvent, sign);
         }
     }
 }
