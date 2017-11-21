@@ -40,16 +40,19 @@ namespace Client
 
             using (ClientProxy proxy = new ClientProxy(endpointConfigurationName))
             {
-                EProcessType procces = EProcessType.VisualStudio15;
+                for (int i = 0; i < 1; i++)
+                {
+                    EProcessType procces = EProcessType.GoogleChrome;
 
-                if(proxy.RunProcess(procces))
-                {
-                    Console.WriteLine(procces.ToString() + " is started!");
+                    if (proxy.RunProcess(procces))
+                    {
+                        Console.WriteLine(procces.ToString() + " is started!");
+                    }
+                    else
+                    {
+                        Console.WriteLine(procces.ToString() + " is not started!");
+                    }
                 }
-                else
-                {
-                    Console.WriteLine(procces.ToString() + " is not started!");
-                }         
             }
             Console.ReadLine();
         } 
