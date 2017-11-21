@@ -19,13 +19,21 @@ namespace Contracts
 
             if (winLogonName.Contains("@"))
             {
+                ///UPN format
                 parts = winLogonName.Split('@');
                 return parts[0];
             }
             else if (winLogonName.Contains("\\"))
             {
+                /// SPN format
                 parts = winLogonName.Split('\\');
                 return parts[1];
+            }
+            else if (winLogonName.Contains("="))
+            {
+                parts = winLogonName.Split('=');
+                parts = parts[1].Split(';');
+                return parts[0];
             }
             else
             {

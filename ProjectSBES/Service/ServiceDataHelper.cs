@@ -13,6 +13,7 @@ namespace Service
         public Dictionary<string, Stopwatch> forbidenUsers;
         public int maxAttempts = 2;
         public int timeOfDenial = 1000 * 60 * 1;
+        public int eventCnt = 0;
 
         private static ServiceDataHelper serviceDataHelper = null;
 

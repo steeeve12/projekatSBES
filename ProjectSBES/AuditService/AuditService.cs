@@ -10,6 +10,7 @@ using System.Security.Cryptography.X509Certificates;
 using AuditLibrary;
 using System.Threading;
 using System.ServiceModel;
+using System.Diagnostics;
 
 namespace Audit.AuditService
 {
@@ -27,7 +28,7 @@ namespace Audit.AuditService
 
             /// Get client's certificate from storage. It is expected that clients sign messages using the certificate with subjectName in the following format "<username>_sign" 		
             //string signCertCN = String.Format(Formatter.ParseName(((GenericPrincipal)((GenericPrincipal)(Thread.CurrentPrincipal.Identity).Name)) + "_sign"); // Check this!!!!!!!!!!!
-
+            Debugger.Launch();
             var identity = ServiceSecurityContext.Current.PrimaryIdentity;
             string name = Formatter.ParseName(identity.Name);
             

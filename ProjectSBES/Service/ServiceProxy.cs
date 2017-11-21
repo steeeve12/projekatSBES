@@ -28,10 +28,9 @@ namespace Service
 
             return audit;
         }
-
-        public bool WriteEvent(SecurityEvent sEvent)
+        public bool WriteEvent(SecurityEvent sEvent, byte[] sign)
         {
-            return audit.factory.WriteEvent(sEvent);
+            throw new NotImplementedException();
         }
     }
 }

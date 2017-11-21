@@ -44,6 +44,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Certificates", "Certificate
 		Certificates\Sign3.pvk = Certificates\Sign3.pvk
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackListConsole", "BlackListConsole\BlackListConsole.csproj", "{263ADA2C-1E21-4D01-A7F8-3315A3FDC925}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +76,10 @@ Global
 		{B6AD7F52-8A72-4B34-9653-E2D3DE17485A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6AD7F52-8A72-4B34-9653-E2D3DE17485A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6AD7F52-8A72-4B34-9653-E2D3DE17485A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{263ADA2C-1E21-4D01-A7F8-3315A3FDC925}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{263ADA2C-1E21-4D01-A7F8-3315A3FDC925}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{263ADA2C-1E21-4D01-A7F8-3315A3FDC925}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{263ADA2C-1E21-4D01-A7F8-3315A3FDC925}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

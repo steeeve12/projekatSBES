@@ -55,6 +55,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AuditLibrary\AuditLibrary.csproj">
+      <Project>{BE0804EF-F927-4CFF-847A-00313F872A48}</Project>
+      <Name>AuditLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Contracts\Contracts.csproj">
       <Project>{4fda9eff-cd36-41e0-975f-8c9dd1a815fa}</Project>
       <Name>Contracts</Name>
