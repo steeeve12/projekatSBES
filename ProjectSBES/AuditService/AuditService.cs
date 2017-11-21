@@ -25,7 +25,7 @@ namespace Audit.AuditService
         public bool WriteEvent(SecurityEvent sEvent, byte[] sign)
         {
             bool retVal = false;
-
+            Debugger.Launch();
             /// Get client's certificate from storage. It is expected that clients sign messages using the certificate with subjectName in the following format "<username>_sign" 		
             //string signCertCN = String.Format(Formatter.ParseName(((GenericPrincipal)((GenericPrincipal)(Thread.CurrentPrincipal.Identity).Name)) + "_sign"); // Check this!!!!!!!!!!!
             var identity = ServiceSecurityContext.Current.PrimaryIdentity;
@@ -33,7 +33,7 @@ namespace Audit.AuditService
             
             string signCertCN = String.Format(name + "_sign");
 
-            X509Certificate2 clientCertificate = CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, signCertCN);
+            X509Certificate2 clientCertificate = CertManager.GetCertificateFromStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, signCertCN);
 
             /// Verify signature using SHA1 hash algorithm
 			if (DigitalSignature.Verify(sEvent, "SHA1", sign, clientCertificate))
