@@ -19,7 +19,6 @@ namespace Audit.AuditService
     {
         static void Main(string[] args)
         {
-            Debugger.Launch();
             /// srvCertCN.SubjectName should be set to the service's username. .NET WindowsIdentity class provides information about Windows user running the given process
             string srvCertCN = Formatter.ParseName(WindowsIdentity.GetCurrent().Name);
 

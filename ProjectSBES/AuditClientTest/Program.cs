@@ -35,7 +35,7 @@ namespace AuditClientTest
             {
                 /// Get service's identity	
                 WindowsIdentity winIdentity = WindowsIdentity.GetCurrent();
-				SecurityEvent message = new SecurityEvent((winIdentity.User).ToString(), winIdentity.Name, "id", "compName", new DateTime(), 1, "event description");
+				SecurityEvent message = new SecurityEvent((winIdentity.User).ToString(), winIdentity.Name, "id", "compName", 1, "event description");
 
                 /// Create a signature based on the "signCertCN"
                 X509Certificate2 signCert = CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, signCertCN);

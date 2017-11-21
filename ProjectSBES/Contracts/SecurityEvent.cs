@@ -21,13 +21,13 @@ namespace Contracts
         /// <param name="timeStamp"> timestamp when the event is reported </param>
         /// <param name="eventId"> id of a forbidden process from a blacklist </param>
         /// <param name="eventDescription"> description of a security event </param>
-        public SecurityEvent(string serviceId, string serviceComputerName, string clientId, string clientComputerName, DateTime timeStamp, int eventId, string eventDescription)
+        public SecurityEvent(string serviceId, string serviceComputerName, string clientId, string clientComputerName, int eventId, string eventDescription)
         {
             ServiceId = serviceId;
             ServiceComputerName = serviceComputerName;
             ClientId = clientId;
             ClientComputerName = clientComputerName;
-            Timestamp = timeStamp;
+            Timestamp = DateTime.Now;
             EventId = eventId;
             EventDescription = eventDescription;
         }
