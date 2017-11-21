@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Selectors;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,7 +20,8 @@ namespace AuditLibrary
         public override void Validate(X509Certificate2 certificate)
         {
             /// This will take service's certificate from storage
-            X509Certificate2 srvCert = CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, "wcfservice");
+            string s = Formatter.ParseName(WindowsIdentity.GetCurrent().Name);
+            X509Certificate2 srvCert = CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, s);
 
             if (!certificate.Issuer.Equals(srvCert.Issuer))
             {

@@ -42,7 +42,7 @@ namespace Audit.AuditLibrary
         {
             if (customLog != null)
             {
-                string s = String.Format("[{0}] Client [id - {1}, computer name - {2}] failed with running process [{3}] on service [id - {4}, computer name - {5}]", sEvent.Timestamp, sEvent.ClientId, sEvent.ClientComputerName, sEvent.EventId, sEvent.ServiceId, sEvent.ClientComputerName);
+                string s = String.Format("[{0}] Client [id - {1}, computer name - {2}] failed with running process [{3}] on service [id - {4}, computer name - {5}]", sEvent.Timestamp, sEvent.ClientId, sEvent.ClientComputerName, sEvent.EventId, sEvent.ServiceId, sEvent.ServiceComputerName);
                 
                 lock (lockObject)
                 {

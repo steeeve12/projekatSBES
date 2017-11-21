@@ -16,11 +16,12 @@ namespace AuditClientTest
     {
         static void Main(string[] args)
         {
+           // Debugger.Launch();
             /// Define the expected service certificate. It is required to establish cmmunication using certificates.
-			string srvCertCN = "wcfservice";
+			string srvCertCN = "auditservice";
 
             /// Define the expected certificate for signing client
-            string signCertCN = "wcfclient";
+            string signCertCN = String.Format(Formatter.ParseName(WindowsIdentity.GetCurrent().Name) + "_sign"); 
 
             NetTcpBinding binding = new NetTcpBinding();
             binding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Certificate;
