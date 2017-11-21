@@ -60,8 +60,8 @@ namespace Service
                             string srvCertCN = "auditservice";
 
                             /// Use CertManager class to obtain the certificate based on the "srvCertCN" representing the expected service identity.
-                            X509Certificate2 srvCert = CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, srvCertCN);
-                            EndpointAddress address = new EndpointAddress(new Uri("net.tcp://localhost:50050/IAuditService"),
+                            X509Certificate2 srvCert = CertManager.GetCertificateFromStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, srvCertCN);
+                            EndpointAddress address = new EndpointAddress(new Uri("net.tcp://10.1.212.185:50050/IAuditService"),
                                                       new X509CertificateEndpointIdentity(srvCert));
 
                             using (ServiceProxy proxy = new ServiceProxy(binding, address))
