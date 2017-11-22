@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Resources;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -44,6 +45,31 @@ namespace BlackListConsole.Command
 
                 return;
             }
+
+            if(parameters[0].ToString().Length >= 20 || parameters[1].ToString().Length >= 20 || parameters[2].ToString().Length >= 20)
+            {
+                MessageBox.Show("20 characters is limit!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                clearFields();
+
+                return;
+            }
+
+            if (!Regex.IsMatch(parameters[0].ToString(), @"^[a-zA-Z0-9]*$") || !Regex.IsMatch(parameters[1].ToString(), @"^[a-zA-Z0-9]*$") || !Regex.IsMatch(parameters[2].ToString(), @"^[a-zA-Z0-9]*$"))
+            {
+                MessageBox.Show("Only letters and numbers are allowed!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                clearFields();
+
+                return;
+            }
+           
+            if(parameters[0].ToString() == "null" || parameters[1].ToString() == "null" || parameters[2].ToString() == "null" || parameters[0].ToString() == "NULL" || parameters[1].ToString() == "NULL" || parameters[2].ToString() == "NULL")
+            {
+                MessageBox.Show("Null string is not allowed!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                clearFields();
+                
+                return;
+            }
+
 
             bool contain = false;
             List<BlackListElement> copyOfOriginalList = new List<BlackListElement>();
