@@ -42,51 +42,26 @@ namespace Service
                         if (ServiceDataHelper.Helper().forbidenUsers[userIdentity].ElapsedMilliseconds > ServiceDataHelper.Helper().timeOfDenial)
                         {
                             Process.Start(processName);
-                            ServiceDataHelper.Helper().usersAttempts[userIdentity] = 0;
-                            ServiceDataHelper.Helper().forbidenUsers[userIdentity] = null;
+                            ServiceDataHelper.Helper().usersAttempts.Remove(userIdentity);
+                            ServiceDataHelper.Helper().forbidenUsers.Remove(userIdentity);
                             return true;
                         }
                         else
                         {
                             ServiceDataHelper.Helper().forbidenUsers[userIdentity].Start();
-
-                            WindowsIdentity winIdentity = WindowsIdentity.GetCurrent();
-                            SecurityEvent message = new SecurityEvent((winIdentity.User).ToString(), winIdentity.Name, ((WindowsIdentity)Thread.CurrentPrincipal.Identity).User.ToString(), principal.Identity.Name, ServiceDataHelper.Helper().eventCnt++, "User tried to execute process from black list more than it is allowed");
-
-                            NetTcpBinding binding = new NetTcpBinding();
-                            binding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Certificate;
-
-                            /// Define the expected service certificate. It is required to establish cmmunication using certificates.
-                            string srvCertCN = "auditservice";
-
-                            /// Use CertManager class to obtain the certificate based on the "srvCertCN" representing the expected service identity.
-                            X509Certificate2 srvCert = CertManager.GetCertificateFromStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, srvCertCN);
-                            EndpointAddress address = new EndpointAddress(new Uri("net.tcp://10.1.212.185:50050/IAuditService"),
-                                                      new X509CertificateEndpointIdentity(srvCert));
-
-                            using (ServiceProxy proxy = new ServiceProxy(binding, address))
-                            {
-                                /// Define the expected certificate for signing client
-                                string signCertCN = String.Format(Formatter.ParseName(WindowsIdentity.GetCurrent().Name) + "_sign");
-
-                                /// Create a signature based on the "signCertCN"
-                                X509Certificate2 signCert = CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, signCertCN);
-
-                                /// Create a signature using SHA1 hash algorithm
-                                byte[] signature = DigitalSignature.Create(message, "SHA1", signCert);
-                                proxy.WriteEvent(message, signature);
-
-                            }
+                            SendEvent(principal);
                             return false;
                         }
 
                     }
-                    catch(Exception e)
+                    catch(Exception)
                     {
-
                         Process.Start(processName);
+                        if (ServiceDataHelper.Helper().forbidenUsers.ContainsKey(userIdentity))
+                        {
+                            ServiceDataHelper.Helper().forbidenUsers.Remove(userIdentity);
+                        }
                         ServiceDataHelper.Helper().usersAttempts.Remove(userIdentity);
-                        ServiceDataHelper.Helper().forbidenUsers.Remove(userIdentity);
                         return true;
                     }
 
@@ -108,12 +83,45 @@ namespace Service
                             ServiceDataHelper.Helper().forbidenUsers.Add(userIdentity, new Stopwatch());
                         }
 
+                        SendEvent(principal);
+
                         ServiceDataHelper.Helper().forbidenUsers[userIdentity].Start();
                     }
                 }
             }
 
             return false;
+        }
+
+        private static void SendEvent(CustomPrincipal principal)
+        {
+            WindowsIdentity winIdentity = WindowsIdentity.GetCurrent();
+            SecurityEvent message = new SecurityEvent((winIdentity.User).ToString(), winIdentity.Name, ((WindowsIdentity)Thread.CurrentPrincipal.Identity).User.ToString(), principal.Identity.Name, ServiceDataHelper.Helper().eventCnt++, "User tried to execute process from black list more than it is allowed");
+
+            NetTcpBinding binding = new NetTcpBinding();
+            binding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Certificate;
+
+            /// Define the expected service certificate. It is required to establish cmmunication using certificates.
+            string srvCertCN = "auditservice";
+
+            /// Use CertManager class to obtain the certificate based on the "srvCertCN" representing the expected service identity.
+            X509Certificate2 srvCert = CertManager.GetCertificateFromStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, srvCertCN);
+            EndpointAddress address = new EndpointAddress(new Uri("net.tcp://10.1.212.185:50050/IAuditService"),
+                                      new X509CertificateEndpointIdentity(srvCert));
+
+            using (ServiceProxy proxy = new ServiceProxy(binding, address))
+            {
+                /// Define the expected certificate for signing client
+                string signCertCN = String.Format(Formatter.ParseName(WindowsIdentity.GetCurrent().Name) + "_sign");
+
+                /// Create a signature based on the "signCertCN"
+                X509Certificate2 signCert = CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, signCertCN);
+
+                /// Create a signature using SHA1 hash algorithm
+                byte[] signature = DigitalSignature.Create(message, "SHA1", signCert);
+                proxy.WriteEvent(message, signature);
+
+            }
         }
     }
 }
