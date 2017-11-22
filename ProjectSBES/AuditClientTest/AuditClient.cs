@@ -15,9 +15,15 @@ namespace AuditClientTest
     {
         IAuditService factory;
 
+        /// <summary>
+        /// Create channel used for communication between client and service
+        /// </summary>
+        /// <param name="binding"> NetTcpBinding </param>
+        /// <param name="address"> service address </param>
         public AuditClient(NetTcpBinding binding, EndpointAddress address) : base(binding, address)
         {
-            /// cltCertCN.SubjectName should be set to the client's username. .NET WindowsIdentity class provides information about Windows user running the given process
+            /// cltCertCN.SubjectName should be set to the client's username. 
+            /// .NET WindowsIdentity class provides information about Windows user running the given process
             string cltCertCN = Formatter.ParseName(WindowsIdentity.GetCurrent().Name);
 
             this.Credentials.ServiceCertificate.Authentication.CertificateValidationMode = System.ServiceModel.Security.X509CertificateValidationMode.Custom;
@@ -33,9 +39,11 @@ namespace AuditClientTest
         /// <summary>
         /// Writing a security event to Windows Event log
         /// </summary>
-        /// <param name="sEvent"> Securi</param>
-        /// <param name="sign"></param>
-        /// <returns></returns>
+        /// <param name="sEvent"> Security event </param>
+        /// <param name="
+        /// 
+        /// "> Digital signature of a message </param>
+        /// <returns> true is writing succeeded, otherwise false </returns>
         public bool WriteEvent(SecurityEvent sEvent, byte[] sign)
         {
             bool retVal = false;

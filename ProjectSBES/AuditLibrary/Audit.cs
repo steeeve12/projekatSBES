@@ -11,8 +11,8 @@ namespace Audit.AuditLibrary
     public class Audit
     {
         private static EventLog customLog = null;
-        const string SourceName = "AuditLibrary.Audit";
-        const string LogName = "ServiceSecurityEvents";
+        private const string SourceName = "AuditLibrary.Audit";
+        private const string LogName = "ServiceSecurityEvents";
         private static Object lockObject = new Object();
 
         static Audit()
@@ -42,7 +42,7 @@ namespace Audit.AuditLibrary
         {
             if (customLog != null)
             {
-                string s = String.Format("[{0}] Client [id - {1}, computer name - {2}] failed with running process on service [id - {3}, computer name - {4}]\nDescription - [{5}]", sEvent.Timestamp, sEvent.ClientId, sEvent.ClientComputerName, sEvent.ServiceId, sEvent.ServiceComputerName, sEvent.EventDescription);
+                string s = String.Format("Time and date: [{0}]\nClient: [id - {1}, computer name - {2}] failed with running process on service [id - {3}, computer name - {4}]\n\nDescription: [{5}]", sEvent.Timestamp, sEvent.ClientId, sEvent.ClientComputerName, sEvent.ServiceId, sEvent.ServiceComputerName, sEvent.EventDescription);
                    
                 lock (lockObject)
                 {
@@ -51,7 +51,7 @@ namespace Audit.AuditLibrary
             }
             else
             {
-                throw new ArgumentException(string.Format("Error while trying to write security event to event log."));
+                throw new ArgumentException("Error while trying to write security event to event log.");
             }
         }
 

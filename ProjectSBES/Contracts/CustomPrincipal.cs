@@ -16,7 +16,7 @@ namespace Contracts
         {
             this.identity = winIdentity;
 
-            /// define list of roles based on Windows groups (roles) 			 
+            /// Define list of roles based on Windows groups (roles) 			 
             foreach (IdentityReference group in this.identity.Groups)
             {
                 SecurityIdentifier sid = (SecurityIdentifier)group.Translate(typeof(SecurityIdentifier));

@@ -98,7 +98,7 @@ namespace Service
         private static void SendEvent(CustomPrincipal principal, string processName)
         {
             WindowsIdentity winIdentity = WindowsIdentity.GetCurrent();
-            SecurityEvent message = new SecurityEvent((winIdentity.User).ToString(), winIdentity.Name, ((WindowsIdentity)Thread.CurrentPrincipal.Identity).User.ToString(), principal.Identity.Name, ServiceDataHelper.Helper().eventCnt++, "User tried to execute process " + processName + " from black list more than it is allowed");
+            SecurityEvent message = new SecurityEvent((winIdentity.User).ToString(), winIdentity.Name, ((WindowsIdentity)Thread.CurrentPrincipal.Identity).User.ToString(), principal.Identity.Name, ServiceDataHelper.Helper().eventCnt++, "User tried to execute process " + processName + " from black list many times than it is allowed");
 
             NetTcpBinding binding = new NetTcpBinding();
             binding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Certificate;
@@ -121,6 +121,7 @@ namespace Service
 
                 /// Create a signature using SHA1 hash algorithm
                 byte[] signature = DigitalSignature.Create(message, "SHA1", signCert);
+
                 proxy.WriteEvent(message, signature);
             }
         }

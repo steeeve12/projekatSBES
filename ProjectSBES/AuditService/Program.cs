@@ -19,7 +19,8 @@ namespace Audit.AuditService
     {
         static void Main(string[] args)
         {            
-            /// srvCertCN.SubjectName should be set to the service's username. .NET WindowsIdentity class provides information about Windows user running the given process
+            /// srvCertCN.SubjectName should be set to the service's username. 
+            /// .NET WindowsIdentity class provides information about Windows user running the given process
             string srvCertCN = Formatter.ParseName(WindowsIdentity.GetCurrent().Name);
 
             ServiceHost _serviceHost = new ServiceHost(typeof(AuditService));
@@ -55,12 +56,17 @@ namespace Audit.AuditService
             {
                 Console.WriteLine("[ERROR] {0}", e.Message);
             }
-            finally
+
+            try
             {
                 _serviceHost.Close();
                 Console.WriteLine("AUDIT_SERVER: Stopped.");
 
                 Thread.Sleep(3 * 1000);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("[ERROR] {0}", e.Message);
             }
         }
     }

@@ -16,8 +16,7 @@ namespace AuditClientTest
     {
         static void Main(string[] args)
         {
-           // Debugger.Launch();
-            /// Define the expected service certificate. It is required to establish cmmunication using certificates.
+            /// Define the expected service certificate. It is required to establish communication using certificates.
 			string srvCertCN = "auditservice";
 
             /// Define the expected certificate for signing client
@@ -35,6 +34,7 @@ namespace AuditClientTest
             {
                 /// Get service's identity	
                 WindowsIdentity winIdentity = WindowsIdentity.GetCurrent();
+                /// Create message to send
 				SecurityEvent message = new SecurityEvent((winIdentity.User).ToString(), winIdentity.Name, "id", "compName", 1, "event description");
 
                 /// Create a signature based on the "signCertCN"

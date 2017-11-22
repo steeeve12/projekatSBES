@@ -39,6 +39,7 @@ namespace Service
 
             return audit;
         }
+
         public bool WriteEvent(SecurityEvent sEvent, byte[] sign)
         {
             return factory.WriteEvent(sEvent, sign);
