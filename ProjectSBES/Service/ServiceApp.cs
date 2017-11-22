@@ -19,7 +19,7 @@ namespace Service
         {
             string processName = ProcessConfig.GetValue(process);
 
-            Debugger.Launch();
+            //Debugger.Launch();
 
             if (processName != null)
             {
