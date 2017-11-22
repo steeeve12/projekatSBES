@@ -13,7 +13,6 @@ namespace Service
 {
     public class ServiceProxy : ChannelFactory<IAuditService>, IAuditService
     {
-
         private static ServiceProxy audit = null;
         private IAuditService factory;
 

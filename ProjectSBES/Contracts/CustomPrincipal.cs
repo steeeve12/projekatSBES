@@ -11,7 +11,6 @@ namespace Contracts
     {
         private WindowsIdentity identity = null;
         private List<string> roles = new List<string>();
-        private static string userIdentity;
 
         public CustomPrincipal(WindowsIdentity winIdentity)
         {
@@ -50,8 +49,6 @@ namespace Contracts
             bool isUserOnBlackList = false;
 
             string blackListValue = BlackListConfiguration.GetBlackListValue(processName);
-
-            UserIdentity = this.identity.Name.Substring(this.identity.Name.LastIndexOf("\\") + 1);
 
             if (blackListValue != null)
             {
@@ -100,7 +97,7 @@ namespace Contracts
             {
                 foreach (string user in users)
                 {
-                    if (user.Equals(UserIdentity))
+                    if (user.Equals(this.identity.Name.Substring(this.identity.Name.LastIndexOf("\\") + 1)))
                     {
                         return true;
                     }
@@ -108,18 +105,6 @@ namespace Contracts
             }
 
             return false;
-        }
-
-        public static string UserIdentity
-        {
-            get
-            {
-                return userIdentity;
-            }
-            set
-            {
-                userIdentity = value;
-            }
         }
     }
 }

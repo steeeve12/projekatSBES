@@ -15,88 +15,90 @@ namespace Service
 {
     public class ServiceApp : IService
     {
+        private static object syncLock = new object();
         public bool RunProcess(EProcessType process)
         {
-            string processName = ProcessConfig.GetValue(process);
-
-            //Debugger.Launch();
-
-            if (processName != null)
+            lock (syncLock)
             {
-                CustomPrincipal principal = Thread.CurrentPrincipal as CustomPrincipal;
+                string processName = ProcessConfig.GetValue(process);
 
-                string userIdentity = "";
-
-                if (!principal.IsInRole(process.ToString()))
+                if (processName != null)
                 {
-                    userIdentity = CustomPrincipal.UserIdentity;
+                    CustomPrincipal principal = Thread.CurrentPrincipal as CustomPrincipal;
 
-                    if (!ServiceDataHelper.Helper().usersAttempts.ContainsKey(userIdentity))
-                    {
-                        ServiceDataHelper.Helper().usersAttempts.Add(userIdentity, 0);
-                    }
+                    string userIdentity = "";
 
-                    try
+                    if (!principal.IsInRole(process.ToString()))
                     {
-                        ServiceDataHelper.Helper().forbidenUsers[userIdentity].Stop();
-                        if (ServiceDataHelper.Helper().forbidenUsers[userIdentity].ElapsedMilliseconds > ServiceDataHelper.Helper().timeOfDenial)
+                        userIdentity = principal.Identity.Name;
+
+                        if (!ServiceDataHelper.Helper().usersAttempts.ContainsKey(userIdentity))
+                        {
+                            ServiceDataHelper.Helper().usersAttempts.Add(userIdentity, 0);
+                        }
+
+                        try
+                        {
+                            ServiceDataHelper.Helper().forbidenUsers[userIdentity].Stop();
+                            if (ServiceDataHelper.Helper().forbidenUsers[userIdentity].ElapsedMilliseconds > ServiceDataHelper.Helper().timeOfDenial)
+                            {
+                                Process.Start(processName);
+                                ServiceDataHelper.Helper().usersAttempts.Remove(userIdentity);
+                                ServiceDataHelper.Helper().forbidenUsers.Remove(userIdentity);
+                                return true;
+                            }
+                            else
+                            {
+                                ServiceDataHelper.Helper().forbidenUsers[userIdentity].Start();
+                                SendEvent(principal, processName);
+                                return false;
+                            }
+
+                        }
+                        catch (Exception)
                         {
                             Process.Start(processName);
+                            if (ServiceDataHelper.Helper().forbidenUsers.ContainsKey(userIdentity))
+                            {
+                                ServiceDataHelper.Helper().forbidenUsers.Remove(userIdentity);
+                            }
                             ServiceDataHelper.Helper().usersAttempts.Remove(userIdentity);
-                            ServiceDataHelper.Helper().forbidenUsers.Remove(userIdentity);
                             return true;
                         }
-                        else
+
+                    }
+                    else
+                    {
+                        userIdentity = principal.Identity.Name;
+
+                        if (!ServiceDataHelper.Helper().usersAttempts.ContainsKey(userIdentity))
                         {
+                            ServiceDataHelper.Helper().usersAttempts.Add(userIdentity, 0);
+                        }
+
+                        ServiceDataHelper.Helper().usersAttempts[userIdentity]++;
+                        if (ServiceDataHelper.Helper().usersAttempts[userIdentity] > ServiceDataHelper.Helper().maxAttempts)
+                        {
+                            if (!ServiceDataHelper.Helper().forbidenUsers.ContainsKey(userIdentity))
+                            {
+                                ServiceDataHelper.Helper().forbidenUsers.Add(userIdentity, new Stopwatch());
+                            }
+
+                            SendEvent(principal, processName);
+
                             ServiceDataHelper.Helper().forbidenUsers[userIdentity].Start();
-                            SendEvent(principal);
-                            return false;
                         }
-
-                    }
-                    catch(Exception)
-                    {
-                        Process.Start(processName);
-                        if (ServiceDataHelper.Helper().forbidenUsers.ContainsKey(userIdentity))
-                        {
-                            ServiceDataHelper.Helper().forbidenUsers.Remove(userIdentity);
-                        }
-                        ServiceDataHelper.Helper().usersAttempts.Remove(userIdentity);
-                        return true;
-                    }
-
-                }
-                else
-                {
-                    userIdentity = CustomPrincipal.UserIdentity;
-
-                    if (!ServiceDataHelper.Helper().usersAttempts.ContainsKey(userIdentity))
-                    {
-                        ServiceDataHelper.Helper().usersAttempts.Add(userIdentity, 0);
-                    }
-
-                    ServiceDataHelper.Helper().usersAttempts[userIdentity]++;
-                    if (ServiceDataHelper.Helper().usersAttempts[userIdentity] > ServiceDataHelper.Helper().maxAttempts)
-                    {
-                        if (!ServiceDataHelper.Helper().forbidenUsers.ContainsKey(userIdentity))
-                        {
-                            ServiceDataHelper.Helper().forbidenUsers.Add(userIdentity, new Stopwatch());
-                        }
-
-                        SendEvent(principal);
-
-                        ServiceDataHelper.Helper().forbidenUsers[userIdentity].Start();
                     }
                 }
+
+                return false;
             }
-
-            return false;
         }
 
-        private static void SendEvent(CustomPrincipal principal)
+        private static void SendEvent(CustomPrincipal principal, string processName)
         {
             WindowsIdentity winIdentity = WindowsIdentity.GetCurrent();
-            SecurityEvent message = new SecurityEvent((winIdentity.User).ToString(), winIdentity.Name, ((WindowsIdentity)Thread.CurrentPrincipal.Identity).User.ToString(), principal.Identity.Name, ServiceDataHelper.Helper().eventCnt++, "User tried to execute process from black list more than it is allowed");
+            SecurityEvent message = new SecurityEvent((winIdentity.User).ToString(), winIdentity.Name, ((WindowsIdentity)Thread.CurrentPrincipal.Identity).User.ToString(), principal.Identity.Name, ServiceDataHelper.Helper().eventCnt++, "User tried to execute process " + processName + " from black list more than it is allowed");
 
             NetTcpBinding binding = new NetTcpBinding();
             binding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Certificate;
@@ -120,7 +122,6 @@ namespace Service
                 /// Create a signature using SHA1 hash algorithm
                 byte[] signature = DigitalSignature.Create(message, "SHA1", signCert);
                 proxy.WriteEvent(message, signature);
-
             }
         }
     }
