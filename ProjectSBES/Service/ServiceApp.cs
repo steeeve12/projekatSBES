@@ -27,65 +27,65 @@ namespace Service
                     CustomPrincipal principal = Thread.CurrentPrincipal as CustomPrincipal;
 
                     string userIdentity = principal.Identity.Name;
-
-                    if (!ServiceDataHelper.Helper().usersAttempts.ContainsKey(userIdentity))
+                  
+                    try
                     {
-                        ServiceDataHelper.Helper().usersAttempts.Add(userIdentity, 0);
-                    }
-
-                    if (!principal.IsInRole(process.ToString()))
-                    {                      
-                        try
+                        ServiceDataHelper.Helper().forbidenUsers[userIdentity].Stop();
+                        if (ServiceDataHelper.Helper().forbidenUsers[userIdentity].ElapsedMilliseconds > ServiceDataHelper.Helper().timeOfDenial)
                         {
-                            ServiceDataHelper.Helper().forbidenUsers[userIdentity].Stop();
-                            if (ServiceDataHelper.Helper().forbidenUsers[userIdentity].ElapsedMilliseconds > ServiceDataHelper.Helper().timeOfDenial)
-                            {
-                                Process.Start(processName);
-                                ServiceDataHelper.Helper().usersAttempts.Remove(userIdentity);
-                                ServiceDataHelper.Helper().forbidenUsers.Remove(userIdentity);
-                                return true;
-                            }
-                            else
-                            {
-                                ServiceDataHelper.Helper().forbidenUsers[userIdentity].Start();
-
-                                return false;
-                            }
-
-                        }
-                        catch (Exception)
-                        {
-                            Process.Start(processName);
-                            if (ServiceDataHelper.Helper().forbidenUsers.ContainsKey(userIdentity))
-                            {
-                                ServiceDataHelper.Helper().forbidenUsers.Remove(userIdentity);
-                            }
                             ServiceDataHelper.Helper().usersAttempts.Remove(userIdentity);
-                            return true;
-                        }
+                            ServiceDataHelper.Helper().forbidenUsers.Remove(userIdentity);
 
-                    }
-                    else
-                    {
-                        ServiceDataHelper.Helper().usersAttempts[userIdentity]++;
-                        if (ServiceDataHelper.Helper().usersAttempts[userIdentity] > ServiceDataHelper.Helper().maxAttempts)
+                            return CheckBlackList(principal, process, userIdentity, processName);
+                        }
+                        else
                         {
-                            if (!ServiceDataHelper.Helper().forbidenUsers.ContainsKey(userIdentity))
-                            {
-                                ServiceDataHelper.Helper().forbidenUsers.Add(userIdentity, new Stopwatch());
-
-                                SendEvent(principal, processName);
-
-                                ServiceDataHelper.Helper().forbidenUsers[userIdentity].Start();
-                            }                           
+                            ServiceDataHelper.Helper().forbidenUsers[userIdentity].Start();
                         }
                     }
-
+                    catch
+                    {
+                        return CheckBlackList(principal, process, userIdentity, processName);
+                    }
                 }
 
                 return false;
             }
         }
+
+        private static bool CheckBlackList(CustomPrincipal principal, EProcessType process, string userIdentity, string processName)
+        {
+            if (!ServiceDataHelper.Helper().usersAttempts.ContainsKey(userIdentity))
+            {
+                ServiceDataHelper.Helper().usersAttempts.Add(userIdentity, 0);
+            }
+
+            if (!principal.IsInRole(process.ToString()))
+            {
+                Process.Start(processName);
+                ServiceDataHelper.Helper().usersAttempts.Remove(userIdentity);
+                ServiceDataHelper.Helper().forbidenUsers.Remove(userIdentity);
+                return true;
+            }
+            else
+            {
+                ServiceDataHelper.Helper().usersAttempts[userIdentity]++;
+                if (ServiceDataHelper.Helper().usersAttempts[userIdentity] > ServiceDataHelper.Helper().maxAttempts)
+                {
+                    if (!ServiceDataHelper.Helper().forbidenUsers.ContainsKey(userIdentity))
+                    {
+                        ServiceDataHelper.Helper().forbidenUsers.Add(userIdentity, new Stopwatch());
+
+                        SendEvent(principal, processName);
+                    }
+
+                    ServiceDataHelper.Helper().forbidenUsers[userIdentity].Start();
+                }
+
+                return false;
+            }
+        } 
+
 
         private static void SendEvent(CustomPrincipal principal, string processName)
         {
