@@ -26,17 +26,15 @@ namespace Service
                 {
                     CustomPrincipal principal = Thread.CurrentPrincipal as CustomPrincipal;
 
-                    string userIdentity = "";
+                    string userIdentity = principal.Identity.Name;
+
+                    if (!ServiceDataHelper.Helper().usersAttempts.ContainsKey(userIdentity))
+                    {
+                        ServiceDataHelper.Helper().usersAttempts.Add(userIdentity, 0);
+                    }
 
                     if (!principal.IsInRole(process.ToString()))
-                    {
-                        userIdentity = principal.Identity.Name;
-
-                        if (!ServiceDataHelper.Helper().usersAttempts.ContainsKey(userIdentity))
-                        {
-                            ServiceDataHelper.Helper().usersAttempts.Add(userIdentity, 0);
-                        }
-
+                    {                      
                         try
                         {
                             ServiceDataHelper.Helper().forbidenUsers[userIdentity].Stop();
@@ -50,7 +48,7 @@ namespace Service
                             else
                             {
                                 ServiceDataHelper.Helper().forbidenUsers[userIdentity].Start();
-                                SendEvent(principal, processName);
+
                                 return false;
                             }
 
@@ -69,26 +67,20 @@ namespace Service
                     }
                     else
                     {
-                        userIdentity = principal.Identity.Name;
-
-                        if (!ServiceDataHelper.Helper().usersAttempts.ContainsKey(userIdentity))
-                        {
-                            ServiceDataHelper.Helper().usersAttempts.Add(userIdentity, 0);
-                        }
-
                         ServiceDataHelper.Helper().usersAttempts[userIdentity]++;
                         if (ServiceDataHelper.Helper().usersAttempts[userIdentity] > ServiceDataHelper.Helper().maxAttempts)
                         {
                             if (!ServiceDataHelper.Helper().forbidenUsers.ContainsKey(userIdentity))
                             {
                                 ServiceDataHelper.Helper().forbidenUsers.Add(userIdentity, new Stopwatch());
-                            }
 
-                            SendEvent(principal, processName);
+                                SendEvent(principal, processName);
 
-                            ServiceDataHelper.Helper().forbidenUsers[userIdentity].Start();
+                                ServiceDataHelper.Helper().forbidenUsers[userIdentity].Start();
+                            }                           
                         }
                     }
+
                 }
 
                 return false;
@@ -111,7 +103,7 @@ namespace Service
             EndpointAddress address = new EndpointAddress(new Uri("net.tcp://10.1.212.185:50050/IAuditService"),
                                       new X509CertificateEndpointIdentity(srvCert));
 
-                /// Define the expected certificate for signing client
+            /// Define the expected certificate for signing client
             string signCertCN = String.Format(Formatter.ParseName(WindowsIdentity.GetCurrent().Name) + "_sign");
 
             /// Create a signature based on the "signCertCN"
