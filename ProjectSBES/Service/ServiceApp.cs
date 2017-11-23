@@ -38,6 +38,10 @@ namespace Service
 
                             return CheckBlackList(principal, process, userIdentity, processName);
                         }
+                        else
+                        {
+                            ServiceDataHelper.Helper().forbidenUsers[userIdentity].Start();
+                        }
                     }
                     catch
                     {
