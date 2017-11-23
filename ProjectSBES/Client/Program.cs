@@ -57,6 +57,20 @@ namespace Client
                             }
                             break;
                         case 3:
+                            if (TestCase3())
+                            {
+                                Console.BackgroundColor = ConsoleColor.DarkGreen;
+                                Console.WriteLine("Test Case 3 passed.");
+                                Console.BackgroundColor = ConsoleColor.Black;
+                            }
+                            else
+                            {
+                                Console.BackgroundColor = ConsoleColor.DarkRed;
+                                Console.WriteLine("Test Case 3 failed.");
+                                Console.BackgroundColor = ConsoleColor.Black;
+                            }
+                            break;
+                        case 4:
                             TestManual();
                             break;
                         default:
