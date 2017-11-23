@@ -1,9 +1,11 @@
 ﻿using Contracts;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Principal;
 using System.ServiceModel;
+using System.ServiceModel.Security;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,6 +15,7 @@ namespace Client
     {
         static void Main(string[] args)
         {
+            Debugger.Launch();
             bool ok = false;
             bool end = false;
             int scenario;
@@ -75,7 +78,7 @@ namespace Client
                 {
                     end = true;
                 }
-               
+
             } while (!end);
         }
 
@@ -170,7 +173,7 @@ namespace Client
                 }
 
             } while (!end);
-            
+
         }
 
         /// <summary>
@@ -224,16 +227,33 @@ namespace Client
         /// <param name="processToExecute"></param>
         static void Run(string endpointConfigurationName, EProcessType processToExecute)
         {
-            using (ClientProxy proxy = new ClientProxy(endpointConfigurationName))
+
+            try
             {
-                if (proxy.RunProcess(processToExecute))
+                using (ClientProxy proxy = new ClientProxy(endpointConfigurationName))
                 {
-                    Console.WriteLine(processToExecute.ToString() + " is started!");
+                    try
+                    {
+
+                        if (proxy.RunProcess(processToExecute))
+                        {
+                            Console.WriteLine(processToExecute.ToString() + " is started!");
+                        }
+                        else
+                        {
+                            Console.WriteLine(processToExecute.ToString() + " is not started!");
+                        }
+                    }
+                    catch (SecurityNegotiationException se)
+                    {
+                        Console.WriteLine("User is not authenticated");
+                        Console.WriteLine(se.Message);
+                    }
+
                 }
-                else
-                {
-                    Console.WriteLine(processToExecute.ToString() + " is not started!");
-                }
+            }
+            catch (Exception e)
+            {
             }
         }
     }
