@@ -195,7 +195,7 @@ namespace Client
             /// Get client's name
             WindowsIdentity winIdentity = WindowsIdentity.GetCurrent();
             string user = Formatter.ParseName(winIdentity.Name);
-        
+
             while (temp <= numberOfProcesses)
             {
                 /// Particular process
@@ -227,6 +227,7 @@ namespace Client
         /// <param name="processToExecute"></param>
         static void Run(string endpointConfigurationName, EProcessType processToExecute)
         {
+
             try
             {
                 using (ClientProxy proxy = new ClientProxy(endpointConfigurationName))
@@ -253,7 +254,6 @@ namespace Client
             }
             catch (Exception e)
             {
-                Console.WriteLine("Communication has been closed.");
             }
         }
     }
