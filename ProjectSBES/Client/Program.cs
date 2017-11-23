@@ -15,7 +15,6 @@ namespace Client
     {
         static void Main(string[] args)
         {
-            Debugger.Launch();
             bool ok = false;
             bool end = false;
             int scenario;
@@ -39,7 +38,7 @@ namespace Client
                             else
                             {
                                 Console.BackgroundColor = ConsoleColor.DarkRed;
-                                Console.WriteLine("Test Case 1 failed because user is on a BlackList for every process.");
+                                Console.WriteLine("Test Case 1 failed.");
                                 Console.BackgroundColor = ConsoleColor.Black;
                             }
                             break;
@@ -53,7 +52,7 @@ namespace Client
                             else
                             {
                                 Console.BackgroundColor = ConsoleColor.DarkRed;
-                                Console.WriteLine("Test Case 2 failed because user does not have forbidden processes.");
+                                Console.WriteLine("Test Case 2 failed.");
                                 Console.BackgroundColor = ConsoleColor.Black;
                             }
                             break;
@@ -226,8 +225,7 @@ namespace Client
 
                     if (onBlackList == usersFromBlackListPerProcess.Contains(user))
                     {
-                        Run(endpointConfigurationName, processToExecute);
-                        retVal = true;
+                        retVal =  Run(endpointConfigurationName, processToExecute);                        
                         break;
                     }
                 }
@@ -241,8 +239,9 @@ namespace Client
         /// </summary>
         /// <param name="endpointConfigurationName"></param>
         /// <param name="processToExecute"></param>
-        static void Run(string endpointConfigurationName, EProcessType processToExecute)
+        static bool Run(string endpointConfigurationName, EProcessType processToExecute)
         {
+            bool retVal = false;
 
             try
             {
@@ -254,6 +253,7 @@ namespace Client
                         if (proxy.RunProcess(processToExecute))
                         {
                             Console.WriteLine(processToExecute.ToString() + " is started!");
+                            retVal = true;
                         }
                         else
                         {
@@ -271,6 +271,8 @@ namespace Client
             catch (Exception e)
             {
             }
+
+            return retVal;
         }
     }
 }
