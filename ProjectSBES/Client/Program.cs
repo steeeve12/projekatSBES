@@ -24,7 +24,7 @@ namespace Client
                 do
                 {
                     Console.WriteLine("------------------------------------------------------------");
-                    Console.Write("Enter scenario you want to see...\n(1)TestCase1 - Process is not on the BlackList\n(2)TestCase2 - Process is on the BlackList\n(3)TestManual\n>");
+                    Console.Write("Enter scenario you want to see...\n(1)TestCase1 - Process is not on the BlackList\n(2)TestCase2 - Process is on the BlackList\n(3)TestCase3 - Simulate writing event to the Audit\n(4)TestManual\n>");
                     ok = Int32.TryParse(Console.ReadLine(), out scenario);
 
                     switch (scenario)
@@ -98,6 +98,22 @@ namespace Client
         static bool TestCase2()
         {
             return Test(true);
+        }
+
+        /// <summary>
+        /// Test tries to find process which is not on a BlackList and run it too many times, so service will write security event to audit
+        /// </summary>
+        /// <returns> true if testing succeeded, otherwise false </returns>
+        static bool TestCase3()
+        {
+            bool retVal = false;
+
+            for (int i=0; i<3; i++)
+            {
+                retVal = TestCase2();
+            }
+
+            return retVal;
         }
 
         /// <summary>
