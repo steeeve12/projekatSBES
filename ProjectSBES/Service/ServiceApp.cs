@@ -64,7 +64,10 @@ namespace Service
             {
                 Process.Start(processName);
                 ServiceDataHelper.Helper().usersAttempts.Remove(userIdentity);
-                ServiceDataHelper.Helper().forbidenUsers.Remove(userIdentity);
+                if (ServiceDataHelper.Helper().forbidenUsers.ContainsKey(userIdentity))
+                {
+                    ServiceDataHelper.Helper().forbidenUsers.Remove(userIdentity);
+                }
                 return true;
             }
             else
