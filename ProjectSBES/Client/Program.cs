@@ -205,7 +205,7 @@ namespace Client
             var numberOfProcesses = Enum.GetNames(typeof(EProcessType)).Length;
 
             /// Choose a service 
-            string endpointConfigurationName = "Contracts.IService.ServerOne";
+            string endpointConfigurationName = "Contracts.IService.ServerThree";
 
             /// Get client's name
             WindowsIdentity winIdentity = WindowsIdentity.GetCurrent();
@@ -268,10 +268,14 @@ namespace Client
 
                 }
             }
-            catch (Exception e)
+            catch (CommunicationObjectFaultedException)
             {
+                Console.WriteLine("Service is in faulted state or it is not started");
             }
-
+            catch (EndpointNotFoundException)
+            {
+                Console.WriteLine("Service is in faulted state or it is not started");
+            }
             return retVal;
         }
     }
