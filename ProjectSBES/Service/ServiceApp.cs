@@ -111,19 +111,16 @@ namespace Service
             EndpointAddress address = new EndpointAddress(new Uri("net.tcp://10.1.212.185:50050/IAuditService"),
                                       new X509CertificateEndpointIdentity(srvCert));
 
-            using (ServiceProxy proxy = new ServiceProxy(binding, address))
-            {
                 /// Define the expected certificate for signing client
-                string signCertCN = String.Format(Formatter.ParseName(WindowsIdentity.GetCurrent().Name) + "_sign");
+            string signCertCN = String.Format(Formatter.ParseName(WindowsIdentity.GetCurrent().Name) + "_sign");
 
-                /// Create a signature based on the "signCertCN"
-                X509Certificate2 signCert = CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, signCertCN);
+            /// Create a signature based on the "signCertCN"
+            X509Certificate2 signCert = CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, signCertCN);
 
-                /// Create a signature using SHA1 hash algorithm
-                byte[] signature = DigitalSignature.Create(message, "SHA1", signCert);
+            /// Create a signature using SHA1 hash algorithm
+            byte[] signature = DigitalSignature.Create(message, "SHA1", signCert);
 
-                proxy.WriteEvent(message, signature);
-            }
+            ServiceProxy.Audit(binding, address).WriteEvent(message, signature);
         }
     }
 }

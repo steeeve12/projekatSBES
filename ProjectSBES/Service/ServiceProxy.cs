@@ -16,7 +16,7 @@ namespace Service
         private static ServiceProxy audit = null;
         private IAuditService factory;
 
-        public ServiceProxy(NetTcpBinding binding, EndpointAddress address) : base(binding, address)
+        private ServiceProxy(NetTcpBinding binding, EndpointAddress address) : base(binding, address)
         {
             string cltCertCN = Formatter.ParseName(WindowsIdentity.GetCurrent().Name);
 
