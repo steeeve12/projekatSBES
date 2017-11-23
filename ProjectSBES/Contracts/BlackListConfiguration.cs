@@ -75,14 +75,13 @@ namespace Contracts
 
         public static string[] GetUsers(string blackListValue)
         {
-            string[] values = blackListValue.Split('!');
             string[] users = null;
+                string[] values = blackListValue.Split('!');
 
-            if (values.Length != 1)
-                users = values[1].Split(',');
-            else
-                users = values[0].Split(',');
-
+                if (values.Length != 1)
+                    users = values[1].Split(',');
+                else
+                    users = values[0].Split(',');
             return users;
         }
 
