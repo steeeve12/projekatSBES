@@ -110,7 +110,7 @@ namespace Client
         /// <returns>true if testing succeeded, or false when every process is not on a BlackList for logged in user </returns>
         static bool TestCase2()
         {
-            return Test(true);
+            return !Test(true);
         }
 
         /// <summary>
@@ -119,14 +119,7 @@ namespace Client
         /// <returns> true if testing succeeded, otherwise false </returns>
         static bool TestCase3()
         {
-            bool retVal = false;
-
-            for (int i=0; i<3; i++)
-            {
-                retVal = TestCase2();
-            }
-
-            return retVal;
+            return TestWritingEvent();
         }
 
         /// <summary>
@@ -239,7 +232,7 @@ namespace Client
 
                     if (onBlackList == usersFromBlackListPerProcess.Contains(user))
                     {
-                        retVal =  Run(endpointConfigurationName, processToExecute);                        
+                        retVal = Run(endpointConfigurationName, processToExecute);
                         break;
                     }
                 }
@@ -291,6 +284,50 @@ namespace Client
                 Console.WriteLine("Service is in faulted state or it is not started");
             }
             return retVal;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns> true if writing succeeded, otherwise false </returns>
+        static bool TestWritingEvent()
+        {
+            bool retVal = false;
+            EProcessType processToExecute;
+            int temp = 0;
+            var numberOfProcesses = Enum.GetNames(typeof(EProcessType)).Length;
+
+            /// Choose a service 
+            string endpointConfigurationName = "Contracts.IService.ServerThree";
+
+            /// Get client's name
+            WindowsIdentity winIdentity = WindowsIdentity.GetCurrent();
+            string user = Formatter.ParseName(winIdentity.Name);
+
+            while (temp <= numberOfProcesses)
+            {
+                /// Particular process
+                processToExecute = (EProcessType)(temp++);
+
+                /// Get forbidden users for particular process
+                string value = BlackListConfiguration.GetBlackListValue(processToExecute.ToString());
+                string[] usersFromBlackListPerProcess;
+                if (!string.IsNullOrEmpty(value))
+                {
+                    usersFromBlackListPerProcess = BlackListConfiguration.GetUsers(value);
+
+                    if (usersFromBlackListPerProcess.Contains(user))
+                    {
+                        for (int i = 0; i < 3; i++)
+                        {
+                            retVal = Run(endpointConfigurationName, processToExecute);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            return !retVal;
         }
     }
 }
