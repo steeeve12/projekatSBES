@@ -15,6 +15,7 @@ namespace Client
     {
         static void Main(string[] args)
         {
+            Debugger.Launch();
             bool ok = false;
             bool end = false;
             int scenario;
@@ -206,7 +207,7 @@ namespace Client
         /// <returns> true if trying to run a process succeeded, otherwise false </returns>
         static bool Test(bool onBlackList)
         {
-            bool retVal = false;
+            bool retVal = true;
             EProcessType processToExecute;
             int temp = 0;
             var numberOfProcesses = Enum.GetNames(typeof(EProcessType)).Length;
@@ -271,6 +272,7 @@ namespace Client
                     {
                         Console.WriteLine("User is not authenticated");
                         Console.WriteLine(se.Message);
+                        return retVal;
                     }
 
                 }
@@ -287,12 +289,12 @@ namespace Client
         }
 
         /// <summary>
-        /// 
+        /// try to run process from a Black list three times
         /// </summary>
         /// <returns> true if writing succeeded, otherwise false </returns>
         static bool TestWritingEvent()
         {
-            bool retVal = false;
+            bool retVal = true;
             EProcessType processToExecute;
             int temp = 0;
             var numberOfProcesses = Enum.GetNames(typeof(EProcessType)).Length;
